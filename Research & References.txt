@@ -1,2 +1,4 @@
 References/Research
 
+https://docs.python.org/2/library/re.html
+Regular expressions can be concatenated to form new regular expressions; if A and B are both regular expressions, then AB is also a regular expression. In general, if a string p matches A and another string q matches B, the string pq will match AB.
