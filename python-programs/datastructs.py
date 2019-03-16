@@ -3,6 +3,7 @@ f = 1.0
 s = "string"
 l = [1, 2, 3, 4, 5]
 
+print(l[-1])
 print(l)
 
 print(l[3])
@@ -25,3 +26,4 @@ basket = {"apple", "banana", "orange", "pear"}
 dobs = {"Tim": "01-01-2000", "Jack": "02-02-2002", "John": "03-03-2003"}
 print(dobs)
 print(dobs["Tim"])
+
