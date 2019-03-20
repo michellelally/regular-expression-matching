@@ -50,4 +50,4 @@ def shunt(infix):
         # Remove the ( from the stack 
     return pofix
 
-print(shunt("(a.b)|(c*.d)"))
+print(shunt("a.(b|d).c*"))
