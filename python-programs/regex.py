@@ -99,7 +99,7 @@ def compile(pofix):
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
 
-        elif c == '.':
+        elif c == '*':
             # pop single nfa from the stack 
             nfa1 = nfastack.pop()
             # create new initial and accept states
@@ -162,7 +162,7 @@ def match(infix, string):
     # shunt and compile the regular epxression 
     # turn infix into postfix
     postfix = shunt(infix)
-    print("postfix: " ,postfix)
+    # print("postfix: " ,postfix)
     # compile the postfix expression into an nfa
     nfa = compile(postfix)
 
@@ -191,8 +191,6 @@ def match(infix, string):
 
 
 
-    
-
 inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
 strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
 
@@ -200,5 +198,5 @@ for i in inifixes:
     for s in strings:
         print(match(i, s), i, s)
 
-    
+
 
