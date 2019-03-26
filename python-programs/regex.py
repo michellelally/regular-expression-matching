@@ -66,6 +66,7 @@ def compile(pofix):
     nfastack = []
 
     for c in pofix: 
+        # Catenation
         if c == '.':
             nfa2 =  nfastack.pop()
             nfa1 = nfastack.pop()
@@ -75,6 +76,7 @@ def compile(pofix):
             newnfa = nfa(nfa1.initial, nfa2.accept)
             nfastack.append(newnfa)
 
+        # Alternation
         elif c == '|':
             # pop 2 nfa's off the stack
             nfa2 =  nfastack.pop()
@@ -99,6 +101,7 @@ def compile(pofix):
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
 
+        # Zero or more
         elif c == '*':
             # pop single nfa from the stack 
             nfa1 = nfastack.pop()
@@ -118,6 +121,28 @@ def compile(pofix):
             # push new nfa to the stack 
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
+
+        # Zero or one
+        elif c == '?':
+             # pop single nfa from the stack 
+            nfa1 = nfastack.pop()
+            # create new initial and accept states
+            # creating an instance of state
+            accept = state()
+            # creating an instance of state
+            initial = state()
+        
+        # One or more
+        elif c == '+':
+             # pop single nfa from the stack 
+            nfa1 = nfastack.pop()
+            # create new initial and accept states
+            # creating an instance of state
+            accept = state()
+            # creating an instance of state
+            initial = state()
+
+
 
         else:
             # creating an instance of state
@@ -190,13 +215,19 @@ def match(infix, string):
     return (nfa.accept in current)
 
 
+def menu(option):
 
-inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
-strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
+    print("===RegEx Matching===")
+    string = input("Enter the string you want to want to check matches a regular expression: ")
+    #string = 
+    print("Enter the infix expression that you want the string to be checked ")
 
-for i in inifixes:
-    for s in strings:
-        print(match(i, s), i, s)
+    inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
+    strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
 
+    for i in inifixes:
+        for s in strings:
+            print(match(i, s), i, s)
 
+    
 
