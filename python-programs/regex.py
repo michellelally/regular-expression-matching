@@ -66,18 +66,8 @@ def compile(pofix):
     nfastack = []
 
     for c in pofix: 
-        # Catenation
-        if c == '.':
-            nfa2 =  nfastack.pop()
-            nfa1 = nfastack.pop()
-            # take 1 of the edges of the accept state and let it 
-            # equal to the initial state in the second NFA
-            nfa1.accept.edge1 = nfa2.initial
-            newnfa = nfa(nfa1.initial, nfa2.accept)
-            nfastack.append(newnfa)
-
         # Alternation
-        elif c == '|':
+        if c == '|':
             # pop 2 nfa's off the stack
             nfa2 =  nfastack.pop()
             nfa1 = nfastack.pop()
@@ -163,9 +153,7 @@ def compile(pofix):
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
 
-
-
-        else:
+        elif c.isalnum():
             # creating an instance of state
             accept = state()
             # creating an instance of state
@@ -176,6 +164,16 @@ def compile(pofix):
             initial.edge1 = accept
             # creates a new instance of the NFA class and set the initial state to the initial state just created and the same with accept
             nfastack.append(nfa(initial, accept))
+        
+        # Catenation
+        else:
+            nfa2 =  nfastack.pop()
+            nfa1 = nfastack.pop()
+            # take 1 of the edges of the accept state and let it 
+            # equal to the initial state in the second NFA
+            nfa1.accept.edge1 = nfa2.initial
+            newnfa = nfa(nfa1.initial, nfa2.accept)
+            nfastack.append(newnfa)
     
     # nfastack should only have a single nfa at the end
     return nfastack.pop()
@@ -239,8 +237,8 @@ def match(infix, string):
 #inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
 #strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
 
-inifixes = ["a+"]
-strings = ["", "a", "aa"]
+inifixes = ["ab+"]
+strings = ["abbbb", "a", "bbb", "ab"]
 
 for i in inifixes:
     for s in strings:

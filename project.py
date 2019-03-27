@@ -115,7 +115,7 @@ def compile(pofix):
             accept = state()
             # creating an instance of state
             initial = state()
-            # join the new initial state to nfa1's initial state and the
+            # join the new initial state to nfa1's initial state
             # take an edge from the initial state and let it equal an accept state
             initial.edge1 = nfa1.initial
             initial.edge2 = accept
@@ -136,12 +136,31 @@ def compile(pofix):
             accept = state()
             # creating an instance of state
             initial = state()
-            # join the new initial state to nfa1's initial state and the
+            # join the new initial state to nfa1's initial state
             # take an edge from the initial state and let it equal an accept state
             initial.edge1 = nfa1.initial
             initial.edge2 = accept
             # join the old accept state to the new accept state
             nfa1.accept.edge1 = accept
+            # push new nfa to the stack 
+            newnfa = nfa(initial, accept)
+            nfastack.append(newnfa)
+        
+        # One or more
+        elif c == '+':
+            # pop single nfa from the stack 
+            nfa1 = nfastack.pop()
+            # create new initial and accept states
+            # creating an instance of state
+            accept = state()
+            # creating an instance of state
+            initial = state()
+            # join the new initial state to nfa1's initial state 
+            initial.edge1 = nfa1.initial
+            # join the new initial state to nfa1's initial state
+            # take an edge from the initial state and let it equal an accept state
+            nfa1.accept.edge1 = nfa1.initial
+            nfa1.accept.edge2 = accept
             # push new nfa to the stack 
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
@@ -199,7 +218,6 @@ def match(infix, string):
 
     # Add the initial state to the current set
     current |= followes(nfa.initial)
-
 
     # loop through each character in the string
     for s in string:
