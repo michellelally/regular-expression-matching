@@ -101,27 +101,6 @@ def compile(pofix):
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
 
-        # Zero or more
-        elif c == '*':
-            # pop single nfa from the stack 
-            nfa1 = nfastack.pop()
-            # create new initial and accept states
-            # creating an instance of state
-            accept = state()
-            # creating an instance of state
-            initial = state()
-            # join the new initla state to nfa1's initial state and the
-            # new accept state
-            initial.edge1 = nfa1.initial
-            initial.edge2 = accept
-            # join the old accept state to the new accept srare and nfa1's
-            # initial state
-            nfa1.accept.edge1 = nfa1.initial
-            nfa1.accept.edge2 = accept
-            # push new nfa to the stack 
-            newnfa = nfa(initial, accept)
-            nfastack.append(newnfa)
-
         # Zero or one
         elif c == '?':
              # pop single nfa from the stack 
@@ -131,6 +110,31 @@ def compile(pofix):
             accept = state()
             # creating an instance of state
             initial = state()
+
+            initial.edge1 = nfa1.initial
+            initial.edge2 = accept
+
+        # Zero or more
+        elif c == '*':
+            # pop single nfa from the stack 
+            nfa1 = nfastack.pop()
+            # create new initial and accept states
+            # creating an instance of state
+            accept = state()
+            # creating an instance of state
+            initial = state()
+            # join the new initial state to nfa1's initial state and the
+            # new accept state
+            initial.edge1 = nfa1.initial
+            initial.edge2 = accept
+            # join the old accept state to the new accept stare and nfa1's
+            # initial state
+            nfa1.accept.edge1 = nfa1.initial
+            nfa1.accept.edge2 = accept
+            # push new nfa to the stack 
+            newnfa = nfa(initial, accept)
+            nfastack.append(newnfa)
+
         
         # One or more
         elif c == '+':
