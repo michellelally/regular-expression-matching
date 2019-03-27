@@ -87,9 +87,9 @@ def compile(pofix):
             # creating an instance of state and connect it to
             # the accept states of the nfa's popped from the stack
             accept = state()
-            # join its arrow to the inital state of nfa1
+            # join initial's in arrow to the inital state of nfa1
             initial.edge1 = nfa1.initial
-            # join its arrow to the inital state of nfa1
+            # join initial's out arrow to the inital state of nfa2
             initial.edge2 = nfa2.initial
             # nfa1 and nfa2 initial states are no longer
             # initial states because theyre pointing
@@ -100,19 +100,6 @@ def compile(pofix):
             # push new nfa to the stack
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
-
-        # Zero or one
-        elif c == '?':
-             # pop single nfa from the stack 
-            nfa1 = nfastack.pop()
-            # create new initial and accept states
-            # creating an instance of state
-            accept = state()
-            # creating an instance of state
-            initial = state()
-
-            initial.edge1 = nfa1.initial
-            initial.edge2 = accept
 
         # Zero or more
         elif c == '*':
@@ -135,9 +122,8 @@ def compile(pofix):
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
 
-        
-        # One or more
-        elif c == '+':
+        # Zero or one
+        elif c == '?':
              # pop single nfa from the stack 
             nfa1 = nfastack.pop()
             # create new initial and accept states
@@ -145,6 +131,37 @@ def compile(pofix):
             accept = state()
             # creating an instance of state
             initial = state()
+
+            initial.edge1 = nfa1.initial
+            initial.edge2 = accept
+
+            # join the old accept state to the new accept stare and nfa1's
+            # initial state
+            nfa1.accept.edge1 = accept
+            # nfa1.accept.edge2 = accept
+            # push new nfa to the stack 
+            newnfa = nfa(initial, accept)
+            nfastack.append(newnfa)
+
+        # One or more
+        elif c == '+':
+            # pop single nfa from the stack 
+            nfa1 = nfastack.pop()
+            # create new initial and accept states
+            # creating an instance of state
+            accept = state()
+            # creating an instance of state
+            initial = state()
+            # join the new initial state to nfa1's initial state and the
+            # new accept state
+            initial.edge1 = nfa1.initial
+            # join the old accept state to the new accept stare and nfa1's
+            # initial state
+            nfa1.accept.edge1 = nfa1.initial
+            nfa1.accept.edge2 = accept
+            # push new nfa to the stack 
+            newnfa = nfa(initial, accept)
+            nfastack.append(newnfa)
 
 
 
@@ -219,19 +236,15 @@ def match(infix, string):
     return (nfa.accept in current)
 
 
-def menu(option):
+#inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
+#strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
 
-    print("===RegEx Matching===")
-    string = input("Enter the string you want to want to check matches a regular expression: ")
-    #string = 
-    print("Enter the infix expression that you want the string to be checked ")
+inifixes = ["a+"]
+strings = ["", "a", "aa"]
 
-    inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
-    strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
-
-    for i in inifixes:
-        for s in strings:
-            print(match(i, s), i, s)
+for i in inifixes:
+    for s in strings:
+        print(match(i, s), i, s)
 
     
 
