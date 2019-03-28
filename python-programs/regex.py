@@ -2,6 +2,24 @@
 # Shunting Yard Algorithm 
 
 def shunt(infix):
+    
+    temp = ""
+
+    for i, c in enumerate(infix):
+        if c in ('+', '|', '?', '*', '.', '('):
+            temp += c
+        else:
+            try:
+                if infix[i+1] not in ('+', '|', '?', '*', '.', ')'):
+                    temp += c + "."
+                else: 
+                    temp += c
+            except IndexError:
+                temp += c
+                break
+
+    infix = temp
+
     specials = {'*': 50, '.': 40, '|': 30}
     pofix = ""
     stack = ""
@@ -66,8 +84,19 @@ def compile(pofix):
     nfastack = []
 
     for c in pofix: 
+
+        # Catenation
+        if c == '.':
+            nfa2 =  nfastack.pop()
+            nfa1 = nfastack.pop()
+            # take 1 of the edges of the accept state and let it 
+            # equal to the initial state in the second NFA
+            nfa1.accept.edge1 = nfa2.initial
+            newnfa = nfa(nfa1.initial, nfa2.accept)
+            nfastack.append(newnfa)
+
         # Alternation
-        if c == '|':
+        elif c == '|':
             # pop 2 nfa's off the stack
             nfa2 =  nfastack.pop()
             nfa1 = nfastack.pop()
@@ -153,7 +182,7 @@ def compile(pofix):
             newnfa = nfa(initial, accept)
             nfastack.append(newnfa)
 
-        elif c.isalnum():
+        else:
             # creating an instance of state
             accept = state()
             # creating an instance of state
@@ -164,17 +193,7 @@ def compile(pofix):
             initial.edge1 = accept
             # creates a new instance of the NFA class and set the initial state to the initial state just created and the same with accept
             nfastack.append(nfa(initial, accept))
-        
-        # Catenation
-        else:
-            nfa2 =  nfastack.pop()
-            nfa1 = nfastack.pop()
-            # take 1 of the edges of the accept state and let it 
-            # equal to the initial state in the second NFA
-            nfa1.accept.edge1 = nfa2.initial
-            newnfa = nfa(nfa1.initial, nfa2.accept)
-            nfastack.append(newnfa)
-    
+            
     # nfastack should only have a single nfa at the end
     return nfastack.pop()
 
@@ -197,8 +216,6 @@ def followes(state):
 
     # Return the set of states
     return states
-
-
 
 def match(infix, string):
     """ Matches the string to the infix regular expression"""
@@ -234,11 +251,11 @@ def match(infix, string):
     return (nfa.accept in current)
 
 
-#inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
-#strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
+inifixes = ["abc*", "a(b|d)c*", "(a(b|d))*", "a(bb)*c"]
+strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
 
-inifixes = ["ab+"]
-strings = ["abbbb", "a", "bbb", "ab"]
+#inifixes = ["a.b.+"]
+#strings = ["abbbb", "a", "bbb", "ab"]
 
 for i in inifixes:
     for s in strings:

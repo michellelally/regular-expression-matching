@@ -235,6 +235,16 @@ def match(infix, string):
     return (nfa.accept in current)
 
 
+inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
+strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
+
+
+for i in inifixes:
+    for s in strings:
+        print(match(i, s), i, s)
+
+
+
 def menu(option):
 
     print("===RegEx Matching===")
