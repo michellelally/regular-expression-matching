@@ -11,25 +11,28 @@ print('?'.isalnum())
 print('|'.isalnum())
 print('.'.isalnum())
 
-infix = "a(bb)*c"
 
-new = ""
+#
+
+word = "a(bb)*c"
+infix = iter(word)
+
 
 temp = ""
 
-for i, c in enumerate(infix):
-    if c in ('+', '|', '?', '*', '.', '('):
-        temp += c
-    else:
-        try:
-            if infix[i+1] not in ('+', '|', '?', '*', '.', ')'):
+for c in infix:
+    try:
+        if c in ('+', '|', '?', '*', '.', '('):
+            temp += c
+        else:
+            if next(infix) not in ('+', '|', '?', '*', '.', ')'):
                 temp += c + "."
                 print("2")
             else: 
                 temp += c
                 print("3")
-        except IndexError:
-            temp += c
-            break
+    except StopIteration:
+        temp += c
+        break
 
 print("temp : ", temp)

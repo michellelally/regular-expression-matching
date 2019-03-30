@@ -1,24 +1,31 @@
 # Michelle Lally
 # Shunting Yard Algorithm 
 
-def shunt(infix):
-    
-    temp = ""
 
+def addconcat(infix):
+    spec1 = ('+', '|', '?', '*', '.', '(')
+    spec2 = ('+', '|', '?', '*', '.', ')')
+
+    temp = ""
     for i, c in enumerate(infix):
-        if c in ('+', '|', '?', '*', '.', '('):
-            temp += c
-        else:
-            try:
-                if infix[i+1] not in ('+', '|', '?', '*', '.', ')'):
+        try:
+            if c in spec1 and infix[i+1] in spec2:
+                temp += c + "."
+            elif c in spec1:
+                temp += c
+            else:
+                if infix[i+1] not in spec2:
                     temp += c + "."
                 else: 
                     temp += c
-            except IndexError:
+        except IndexError:
                 temp += c
                 break
+    #print("temp", temp)
+    return temp
 
-    infix = temp
+def shunt(infix):
+    infix = addconcat(infix)   
 
     specials = {'*': 50, '.': 40, '|': 30}
     pofix = ""
@@ -251,15 +258,18 @@ def match(infix, string):
     return (nfa.accept in current)
 
 
-inifixes = ["abc*", "a(b|d)c*", "(a(b|d))*", "a(bb)*c"]
-strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
+inifixes = ["abc*", "a(b|d)c*", "(a(b|d))*", "a(bb)c?", "a+"]
+strings = ["", "abc", "abbc", "abcc", "abad", "adab", "abbbc", "abababcc"]
 
 #inifixes = ["a.b.+"]
 #strings = ["abbbb", "a", "bbb", "ab"]
 
 for i in inifixes:
+    print('==================================================')
+    print('\tExpression : ', i)
     for s in strings:
-        print(match(i, s), i, s)
+        print('{0}\t|| {1}\t||\t{2}'.format(match(i, s), i, s))
+    print('==================================================')
 
     
 
