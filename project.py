@@ -1,10 +1,52 @@
 # Michelle Lally G00351333
 # Graph Theory Project 2019
 
-# Michelle Lally
-# Shunting Yard Algorithm 
+def addconcat(infix):
+    '''
+        Function that generates updates the expression to append concatenation if it hasn't been included used
+    '''
+    # Special characters - 2 sets. Since there are different outcomes
+    # when brackets are used there needs to be 2 different set of characters
+    spec1 = ('+', '|', '?', '*', '.', '(')
+    spec2 = ('+', '|', '?', '*', '.', ')')
+
+    # temporary variable to store the updated expression in
+    temp = ""
+    # converting infix to an enum so it becomes iterarable
+    for i, c in enumerate(infix):
+        # check if the character is a special character 
+        # this means it doesn't need to have the concat character appended
+        if c in ('+', '|', '?', '*', '.', '('):
+            temp += c
+        else:
+           # try to catch IndexError exception
+           # needed for when it is checking the next character 
+           # on last character it will search an index that is out of bounds
+            try:
+                # check the next character is not a special character
+                if infix[i+1] not in ('+', '|', '?', '*', '.', ')'):
+                    # if it isn't appened the concat character
+                    temp += c + "."
+                # otherwise don't appened character
+                else: 
+                    temp += c
+            # if exception is thrown
+            except IndexError:
+                # add the character as it is
+                temp += c
+                break
+    #print("temp", temp)
+    return temp
 
 def shunt(infix):
+    '''
+        Shunting yard algorithm to translate infix notation to infix notation
+        Needed because the computer is unaware of order of precedence 
+    '''
+    # call the addconcat method to append implicit concatenation 
+    infix = addconcat(infix) 
+
+    # order of precendence in special characters 
     specials = {'*': 50, '.': 40, '|': 30}
     pofix = ""
     stack = ""
@@ -234,30 +276,48 @@ def match(infix, string):
     #check is the accept state is in the currect states
     return (nfa.accept in current)
 
+print("===Regular Expression Matching Console Application===")
 
-inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
-strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
-
+inifixes = ["(abc)?","abc*", "a(b|d)c*", "(a(b|d))*", "a(b)c", "a|bc+"]
+strings = ["", "abc", 'bcc', "abbc", "daab", "abcc", "abd", "abbc"]
 
 for i in inifixes:
+    print('==================================================')
+    print('\tExpression : ', i)
     for s in strings:
-        print(match(i, s), i, s)
+        print('{0}\t|| {1}\t||\t{2}'.format(match(i, s), i, s))
+print('==================================================')
 
-
+#print("Please choose from one of the following options: ")
+#print("\t1. Enter a regex and string manually")
+#print("\t2. Check a regex using the built in test data")
+#print("\t3. To exit")
+#option = input()
+#while option != 3:
+#   menu(option)    
 
 def menu(option):
 
-    print("===RegEx Matching===")
-    string = input("Enter the string you want to want to check matches a regular expression: ")
-    #string = 
-    print("Enter the infix expression that you want the string to be checked ")
+    if option == 1:
+        print("=== Manual Matching ===")
+        s = input("Enter the string you want to want to check matches a regular expression: ")
+        i = input("Enter the infix expression that you want the string to be checked ")
+        print('==================================================')
+        print('\tExpression : ', i)
+        print('{0}\t|| {1}\t||\t{2}'.format(match(i, s), i, s))
+        print('==================================================')
 
-    inifixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
-    strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
+    elif option == 2:
+        for i in inifixes:
+            print('==================================================')
+            print('\tExpression : ', i)
+            for s in strings:
+                print('{0}\t|| {1}\t||\t{2}'.format(match(i, s), i, s))
+            print('==================================================')
 
-    for i in inifixes:
-        for s in strings:
-            print(match(i, s), i, s)
+    else:
+        print("Invalid input. Please try again")
 
-    
+
+
 

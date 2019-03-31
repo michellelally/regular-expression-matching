@@ -8,17 +8,15 @@ def addconcat(infix):
 
     temp = ""
     for i, c in enumerate(infix):
-        try:
-            if c in spec1 and infix[i+1] in spec2:
-                temp += c + "."
-            elif c in spec1:
-                temp += c
-            else:
-                if infix[i+1] not in spec2:
+        if c in ('+', '|', '?', '*', '.', '('):
+            temp += c
+        else:
+            try:
+                if infix[i+1] not in ('+', '|', '?', '*', '.', ')'):
                     temp += c + "."
                 else: 
                     temp += c
-        except IndexError:
+            except IndexError:
                 temp += c
                 break
     #print("temp", temp)
@@ -257,9 +255,9 @@ def match(infix, string):
     #check is the accept state is in the currect states
     return (nfa.accept in current)
 
+inifixes = ["(abc)?","abc*", "a(b|d)c*", "(a(b|d))*", "a(b)c", "a|bc+"]
+strings = ["", "abc", 'bcc', "abbc", "daab", "abcc", "abd", "abbc"]
 
-inifixes = ["abc*", "a(b|d)c*", "(a(b|d))*", "a(bb)c?", "a+"]
-strings = ["", "abc", "abbc", "abcc", "abad", "adab", "abbbc", "abababcc"]
 
 #inifixes = ["a.b.+"]
 #strings = ["abbbb", "a", "bbb", "ab"]
