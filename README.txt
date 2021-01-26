@@ -116,11 +116,7 @@ if c = '+'
 	Take an edge from the NFA's initial state and join it to the new accept state
 	This creates a new NFA 
 	Append it to the stack
-
-
-
-Not sure about this test data, didn't really spend too much time on making proper data that really tests the internals of the program 
-
+	
 Test Data: 
 inifixes = ["abc*", "a?(b|d)c*", "(a(b|d))*", "d(bb)c?", "b+aa?", "d+(ba)*", "b*(b?d?)c"]
 strings = ["", "abc", "abccc", "abbc", "bbcc", "abad", "daab", "abbbc", "dbdbc", "abbabcc"]
